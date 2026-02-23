@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acarajé da Neide - Cadastro de Clientes</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fcf3e8;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .app-container {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 400px;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        h2 {
+            color: #d35400;
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 5px;
+            font-size: 24px;
+        }
+        .subtitulo {
+            display: block;
+            font-size: 14px;
+            color: #7f8c8d;
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: normal;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+        .form-group:last-of-type {
+            border-bottom: none;
+        }
+        label.title {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 15px;
+            margin-top: 12px;
+        }
+        input[type="text"], input[type="tel"], input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 15px;
+            font-family: inherit;
+        }
+        .btn-enviar {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        .btn-enviar:hover {
+            background-color: #2980b9;
+        }
+        .btn-enviar:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        /* ESTILOS DA JANELA FLUTUANTE (MODAL) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 30px 20px;
+            border-radius: 12px;
+            text-align: center;
+            width: 90%;
+            max-width: 350px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+        }
+        .modal-content h3 {
+            color: #27ae60;
+            margin-top: 0;
+            font-size: 22px;
+        }
+        .modal-content p {
+            color: #555;
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        .btn-whatsapp {
+            display: block;
+            background-color: #25D366;
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 10px;
+            transition: background-color 0.3s;
+        }
+        .btn-whatsapp:hover {
+            background-color: #128C7E;
+        }
+        .btn-fechar-modal {
+            background-color: #ecf0f1;
+            color: #333;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-fechar-modal:hover {
+            background-color: #bdc3c7;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <h2>Acarajé da Neide</h2>
+    <span class="subtitulo">Olímpia - SP | Cadastro de Clientes VIP</span>
+    
+    <form id="formCadastro">
+        
+        <div class="form-group">
+            <label class="title" for="nomeCliente">Nome Completo:</label>
+            <input type="text" id="nomeCliente" placeholder="Digite seu nome" required>
+            
+            <label class="title" for="telefoneCliente">WhatsApp:</label>
+            <input type="tel" id="telefoneCliente" placeholder="(17) 99999-9999" required>
+        </div>
+
+        <div class="form-group">
+            <label class="title" for="enderecoCliente">Endereço (Rua e Número):</label>
+            <input type="text" id="enderecoCliente" placeholder="Ex: Rua das Flores, 123" required>
+
+            <label class="title" for="bairroCliente">Bairro:</label>
+            <input type="text" id="bairroCliente" placeholder="Seu bairro" required>
+        </div>
+
+        <button type="button" class="btn-enviar" onclick="enviarCadastro()">Finalizar Cadastro</button>
+    </form>
+</div>
+
+<div id="modalSucesso" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <h3>✅ Cadastro Realizado!</h3>
+        <p>Seus dados foram salvos com sucesso. Agora você faz parte da nossa lista VIP e receberá nossas novidades e promoções exclusivas!</p>
+        
+        <a href="https://wa.me/5517996394196" target="_blank" class="btn-whatsapp">Chamar no WhatsApp</a>
+        <button type="button" class="btn-fechar-modal" onclick="fecharModal()">Fechar</button>
+    </div>
+</div>
+
+<script>
+    const EMAIL_DESTINO = "josueitaguacu22@gmail.com"; 
+
+    function enviarCadastro() {
+        const nome = document.getElementById('nomeCliente').value;
+        const telefone = document.getElementById('telefoneCliente').value;
+        const endereco = document.getElementById('enderecoCliente').value;
+        const bairro = document.getElementById('bairroCliente').value;
+
+        // Validações simples
+        if (!nome || !telefone || !endereco || !bairro) {
+            alert("Por favor, preencha todos os campos para finalizar o cadastro!");
+            return;
+        }
+
+        const btn = document.querySelector('.btn-enviar');
+        
+        btn.innerText = "Enviando Dados... Aguarde";
+        btn.disabled = true;
+
+        let dadosCadastro = `👤 NOVO CLIENTE CADASTRADO\n\n`;
+        dadosCadastro += `Nome: ${nome}\n`;
+        dadosCadastro += `WhatsApp: ${telefone}\n\n`;
+        dadosCadastro += `📍 ENDEREÇO\n`;
+        dadosCadastro += `Rua/Número: ${endereco}\n`;
+        dadosCadastro += `Bairro: ${bairro}\n`;
+
+        fetch(`https://formsubmit.co/ajax/${EMAIL_DESTINO}`, {
+            method: "POST",
+            headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                _subject: `NOVO CADASTRO - ${nome} (Acarajé da Neide)`,
+                _replyto: EMAIL_DESTINO,
+                Nome: nome,
+                Telefone: telefone,
+                Bairro: bairro,
+                Resumo_Cadastro: dadosCadastro
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // MOSTRA A JANELA FLUTUANTE DE SUCESSO
+            document.getElementById('modalSucesso').style.display = 'flex';
+        })
+        .catch(error => {
+            alert("❌ Ocorreu um erro ao enviar seu cadastro. Verifique a internet e tente novamente.");
+            btn.innerText = "Finalizar Cadastro";
+            btn.disabled = false;
+        });
+    }
+
+    function fecharModal() {
+        // Esconde a janela e recarrega a página para limpar o formulário
+        document.getElementById('modalSucesso').style.display = 'none';
+        window.location.reload();
+    }
+</script>
+
+</body>
+</html>
